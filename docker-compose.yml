@@ -1,7 +1,7 @@
 version: "3"
 services:
     app:
-        image: react-app
+        image: react-img
         container_name: react-app
         restart: always
         build: ./react-app
@@ -16,7 +16,7 @@ services:
         networks:
             - webappnetwork
     api:
-        image: express-api
+        image: express-img
         container_name: express-api
         restart: always
         build: ./express-api
@@ -26,6 +26,33 @@ services:
             - ./express-api:/api
         networks:
             - webappnetwork
+        depends_on:
+            - db
+    db:
+        image: mongo:4
+        container_name: mongodb-data
+        restart: always
+        volumes:
+            - ./mongodb-data/data:/data/db
+        ports:
+            - "27017:27017"
+        command: mongod --noauth --smallfiles
+        networks:
+            - webappnetwork
+    # dbadmin:
+    #     image: mongo-express:latest
+    #     container_name: mongo-express
+    #     environment:
+    #         - ME_CONFIG_MONGODB_SERVER=db
+    #         - ME_CONFIG_MONGODB_PORT=27017
+    #         - ME_CONFIG_MONGODB_ENABLE_ADMIN=false
+    #         # - ME_CONFIG_MONGODB_AUTH_DATABASE=test
+    #         - ME_CONFIG_MONGODB_AUTH_DATABASE=admin
+    #     ports:
+    #         - "8081:8081"
+    #     links:
+    #         - db
+
 networks:
     webappnetwork:
         driver: bridge
