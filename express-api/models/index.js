@@ -55,7 +55,5 @@ const seedDB = async() =>{
 
 const models = { Farm };
 
-// export { connectDb };
-// export default models;
 
 module.exports = {models, connectDb}
