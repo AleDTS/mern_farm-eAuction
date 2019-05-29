@@ -3,14 +3,14 @@ services:
     app:
         image: react-img
         container_name: react-app
-        restart: always
+        # restart: always
         build: ./react-app
         ports:
-            - "3000:3000"
+            - ${APP_PORT}:${APP_PORT}
         working_dir: /app
         volumes:
             - ./react-app:/app
-        entrypoint: ["npm", "start"]
+        # entrypoint: ["npm", "start"]
         links:
             - api
         networks:
@@ -18,24 +18,26 @@ services:
     api:
         image: express-img
         container_name: express-api
-        restart: always
+        # restart: always
         build: ./express-api
         ports:
-            - "9000:9000"
+            - ${PORT}:${PORT}
         volumes:
             - ./express-api:/api
         networks:
             - webappnetwork
         depends_on:
             - db
+        env_file:
+            - ./.env
     db:
         image: mongo:4
-        container_name: mongodb-data
-        restart: always
+        container_name: mongo
+        # restart: always
         volumes:
             - ./mongodb-data/data:/data/db
         ports:
-            - "27017:27017"
+            - ${MONGODB_PORT}:${MONGODB_PORT}
         command: mongod --noauth --smallfiles
         networks:
             - webappnetwork
@@ -43,11 +45,12 @@ services:
     #     image: mongo-express:latest
     #     container_name: mongo-express
     #     environment:
-    #         - ME_CONFIG_MONGODB_SERVER=db
-    #         - ME_CONFIG_MONGODB_PORT=27017
+    #         - ME_CONFIG_MONGODB_URL=${MONGODB_URL}
+    #         # - ME_CONFIG_MONGODB_SERVER=db
+    #         # - ME_CONFIG_MONGODB_PORT=27017
     #         - ME_CONFIG_MONGODB_ENABLE_ADMIN=false
     #         # - ME_CONFIG_MONGODB_AUTH_DATABASE=test
-    #         - ME_CONFIG_MONGODB_AUTH_DATABASE=admin
+    #         # - ME_CONFIG_MONGODB_AUTH_DATABASE=admin
     #     ports:
     #         - "8081:8081"
     #     links:

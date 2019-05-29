@@ -1,59 +1,38 @@
+// https://stackoverflow.com/questions/50343116/import-csv-using-mongoose-schema
+// https://www.freecodecamp.org/news/create-a-fullstack-react-express-mongodb-app-using-docker-c3e3e21c4074/
+// https://www.robinwieruch.de/mongodb-express-setup-tutorial/
+// https://hackernoon.com/how-to-develop-a-boilerplate-for-api-with-node-js-express-and-mongodb-4c771ae1c2df
+// https://www.luiztools.com.br/post/autenticacao-json-web-token-jwt-em-nodejs/
+
 const mongoose = require('mongoose');
-const csv = require('fast-csv');
-const fs = require('fs');
 
-// import Farm from 'farm';
-var Farm = require('../models/farm')
+// get env mongo url string
+const uri = process.env.MONGODB_URL || 'mongodb://db:27017/test'
 
-const eraseDatabaseOnSync = true;
-
-const uri = 'mongodb://db:27017/test'
-const csvFarm = __dirname+'/../public/data/farms.csv'
-
-var farmStream = fs.createReadStream(csvFarm);
-
-
-// Database connection
-const connectDb = () => {
+// object to connect to db
+const connectDB = () => {
 	// return mongoose.connect(process.env.DATABASE_URL)
 	return mongoose.connect(uri,  {useNewUrlParser: true })
 };
 
-connectDb()
-	.then(async() => {
-		  if (eraseDatabaseOnSync) {
-		    await Promise.all([
-		      models.Farm.deleteMany({})
-			  	.then(res =>{console.log(res)}),
-		    ]);
-		  }
+const eraseDatabaseOnSync = true;
 
-		  seedDB();
+connectDB().then(async () => {
+	// if (eraseDatabaseOnSync) {
+	// 	await Promise.all([
+	// 		Farm.deleteMany({})
+	// 		.then(res =>{console.log(res)}),
+	// 		// ,models.NDVI.deleteMany({})
+	// 	]);
+	// }
+	console.log('database connected')
+	// seed()
+});
 
-		  console.log('MongoDB Connected')
-	})
-	.catch(err => console.log(err));
+// const models = { Farm, Ndvi };
 
-const seedDB = async() =>{
-	var farms = [];
-	csv
-		.fromStream(farmStream, {headers: true, ignoreEmpty: true})
-		.on('data', function(data){
-			// console.log(typeof data)
-			data['_id'] = new mongoose.Types.ObjectId();
-			farms.push(data);
-			console.log(farms);
-		})
-		.on("end", function(){
-			// console.log(
-			Farm.create(farms, (err) =>{
-				if (err) throw err;
-			})
-	    	// console.log('done')
-	    });
-}
+// export { connectDB, seedDB }
 
-const models = { Farm };
+// export default models;
 
-
-module.exports = {models, connectDb}
+module.exports = connectDB

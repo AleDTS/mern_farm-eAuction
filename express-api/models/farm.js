@@ -14,46 +14,26 @@ const FarmSchema = new Schema({
 	price:				Number
 });
 
-/*
-SomeModel.create({ name: 'also_awesome' }, function (err, awesome_instance) {
-  if (err) return handleError(err);
-  // saved!
+FarmSchema.statics.findByName = async function (id) {
+	let farm = await this.findOne({
+		farm_id: id
+	})
+
+	return farm;
+}
+
+FarmSchema.pre('save', function(next) {
+	console.log('added farm '+this.farm_id)
+	// this.model('NDVI').find({farm: this._id}, next)
 });
 
-var Athlete = mongoose.model('Athlete', yourSchema);
-
-// find all athletes who play tennis, selecting the 'name' and 'age' fields
-Athlete.find({ 'sport': 'Tennis' }, 'name age', function (err, athletes) {
-  if (err) return handleError(err);
-  // 'athletes' contains the list of athletes that match the criteria.
-})
-
-// Virtual for author's lifespan
-AuthorSchema
-.virtual('lifespan')
-.get(function () {
-  return (this.date_of_death.getYear() - this.date_of_birth.getYear()).toString();
+FarmSchema.pre('remove', function(next) {
+	// console.log('oi')
+	// this.model('NDVI').find({farm: this._id}, next)
 });
 
-// Virtual for author's URL
-AuthorSchema
-.virtual('url')
-.get(function () {
-  return '/catalog/author/' + this._id;
-});
+let Farm = module.exports = mongoose.model('Farm', FarmSchema);
 
-
-Athlete.
-  find().
-  where('sport').equals('Tennis').
-  where('age').gt(17).lt(50).  //Additional where query
-  limit(5).
-  sort({ age: -1 }).
-  select('name age').
-  exec(callback); // where callback is the name of our callback function.
-*/
-
-const Farm = mongoose.model('Farm', FarmSchema);
-// export default User;
-
-module.exports = Farm;
+// module.exports.get = function (callback, limit) {
+//     Farm.find(callback).limit(limit);
+// }
