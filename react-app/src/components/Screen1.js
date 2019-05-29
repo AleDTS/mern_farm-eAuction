@@ -1,5 +1,11 @@
 import React from 'react'
 import Map from './Map'
+import CardSearch from './CardSearch'
+import {
+	Container,
+	Row,
+	Col
+} from 'react-bootstrap'
 
 export default class Screen1 extends React.Component{
 	constructor(props) {
@@ -11,152 +17,192 @@ export default class Screen1 extends React.Component{
 
 	render() {
 		return (
-			<div>
-				<div>
-					<h1>Farm X</h1>
-					<div>
-						<FilterableFarmCardRow farms={FARMS} />
-					</div>
-				</div>
-				<div>
-					<Map />
-				</div>
-			</div>
+			<Container>
+				<Row>
+					<Col>
+						<Map geojson={GEOJSON}/>
+					</Col>
+					<Col>
+						<CardSearch farms={FARMS} />
+					</Col>
+				</Row>
+			</Container>
 
 		);
 	}
 }
 
-
-class FarmAttRow extends React.Component {
-	render() {
-		return (
-			<tr>
-				<td>{this.props.key}</td>
-				<td>{this.props.value}</td>
-			</tr>
-		);
-	}
+const GEOJSON = {
+    "type": "FeatureCollection",
+    "crs": {
+        "type": "name",
+        "properties": {
+            "name": "urn:ogc:def:crs:OGC:1.3:CRS84"
+        }
+    },
+    "features": [
+        {
+            "type": "Feature",
+            "properties": {
+                "g_name": "Talhão-0",
+                "g_area_ha": "18.32915032824457",
+                "field_id": "1515"
+            },
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [
+                            -74.208312,
+                            4.685498
+                        ],
+                        [
+                            -74.204471,
+                            4.685476
+                        ],
+                        [
+                            -74.203934,
+                            4.681862
+                        ],
+                        [
+                            -74.208419,
+                            4.681926
+                        ],
+                        [
+                            -74.208312,
+                            4.685498
+                        ]
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "g_name": "Talhão-0",
+                "g_area_ha": "4.154656196260981",
+                "field_id": "1314"
+            },
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [
+                            -74.211537,
+                            4.690747
+                        ],
+                        [
+                            -74.208819,
+                            4.690709
+                        ],
+                        [
+                            -74.208802,
+                            4.690576
+                        ],
+                        [
+                            -74.208759,
+                            4.689474
+                        ],
+                        [
+                            -74.211531,
+                            4.689517
+                        ],
+                        [
+                            -74.211537,
+                            4.690747
+                        ]
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "g_name": "Talhão-0",
+                "g_area_ha": "18.10678373520952",
+                "field_id": "1315"
+            },
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [
+                            -74.212951,
+                            4.685609
+                        ],
+                        [
+                            -74.209111,
+                            4.685587
+                        ],
+                        [
+                            -74.209133,
+                            4.683641
+                        ],
+                        [
+                            -74.208489,
+                            4.683641
+                        ],
+                        [
+                            -74.208489,
+                            4.68193
+                        ],
+                        [
+                            -74.212479,
+                            4.682059
+                        ],
+                        [
+                            -74.213359,
+                            4.684347
+                        ],
+                        [
+                            -74.212951,
+                            4.684497
+                        ],
+                        [
+                            -74.212951,
+                            4.685609
+                        ]
+                    ]
+                ]
+            }
+        },
+        {
+            "type": "Feature",
+            "properties": {
+                "g_name": "Talhão-0",
+                "g_area_ha": "37.04083596623678",
+                "field_id": "1313"
+            },
+            "geometry": {
+                "type": "Polygon",
+                "coordinates": [
+                    [
+                        [
+                            -74.208167,
+                            4.689308
+                        ],
+                        [
+                            -74.208296,
+                            4.685673
+                        ],
+                        [
+                            -74.217048,
+                            4.685951
+                        ],
+                        [
+                            -74.216619,
+                            4.68933
+                        ],
+                        [
+                            -74.208167,
+                            4.689308
+                        ]
+                    ]
+                ]
+            }
+        }
+    ]
 }
-
-class FarmCard extends React.Component {
-
-	render() {
-		const rows = []
-		const farmAtt = this.props.farmAtt
-
-		this.props.att_shown.forEach( (attribute) => {
-			rows.push(
-				<FarmAttRow
-					key={attribute.key}
-					value={farmAtt[attribute]}
-				/>
-			)
-		})
-
-		return(
-			<div>
-				<button>
-					expand
-				</button>
-				<table>
-					<tbody>{rows}</tbody>
-				</table>
-			</div>
-		)
-	}
-}
-
-
-class FarmCardRow extends React.Component {
-	render() {
-		const filterText = this.props.filterText
-		const cards = []
-		const farms = this.props.farms;
-		// console.log(filterText)
-		farms.forEach( farm => {
-			console.log(farm.name)
-			if (
-				( farm.name.indexOf(filterText) === -1)
-			)
-				return;
-
-			cards.push(
-				<FarmCard farmAtt={farm} att_shown={ATT_SHOWN}/>
-			)
-		})
-
-		return(
-			<div>
-				{cards}
-			</div>
-		)
-	}
-}
-
-class SearchBar extends React.Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			filterText: ''
-		};
-		this.handleFilterTextChange = this.handleFilterTextChange.bind(this)
-	}
-
-	handleFilterTextChange(e){
-		this.props.onFilterTextChange(e.target.value)
-		// console.log(this.filterText)
-	}
-
-	render(){
-
-		const filterText = this.props.filterText;
-
-		return(
-			<form>
-				<input
-					type="text"
-					placeholder="Search..."
-					value={this.props.filterText}
-					onChange={this.handleFilterTextChange}
-				/>
-			</form>
-		)
-	}
-}
-
-class FilterableFarmCardRow extends React.Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			filterText: ''
-		};
-		this.handleFilterTextChange = this.handleFilterTextChange.bind(this)
-	}
-
-	handleFilterTextChange(filterText){
-		this.setState({
-			filterText: filterText
-		})
-	}
-
-	render(){
-		return(
-			<div>
-				<SearchBar
-					filterText={this.state.filterText}
-					onFilterTextChange={this.handleFilterTextChange}
-				/>
-				<FarmCardRow
-					farms={this.props.farms}
-					filterText={this.state.filterText}
-				/>
-			</div>
-		)
-	}
-}
-
-const ATT_SHOWN = ['name', 'culture', 'variety', 'yield_estimation', 'price']
 
 const FARMS = [
 	{ "farm_id" : 221, "name" : "Farm X", "latitude" : 4.68566, "longitude" : -74.21133, "culture" : "soybean", "variety" : "XXX1", "total_area" : 1000, "yield_estimation" : 60, "price" : 72, "__v" : 0 },
