@@ -29,11 +29,12 @@ export default class App extends React.Component {
             .catch(err => err);
     }
 
+
     // Execute the calls when componnent mounts
-    componentDidMount() {
-        this.callAPI();
-        this.callDB();
-    }
+	componentDidMount() {
+
+  	}
+
 
     render() {
 		return (

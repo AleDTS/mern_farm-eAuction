@@ -5,7 +5,6 @@ var router = express.Router();
 let farmController = require('./../models/farmController');
 
 router.use(function(req, res, next){
-	console.log('rotas');
 	next();
 })
 
@@ -16,5 +15,6 @@ router.get('/', function(req, res, next) {
 //Route to list all farms
 router.route('/farms')
 	.get(farmController.list)
+
 
 module.exports = router;

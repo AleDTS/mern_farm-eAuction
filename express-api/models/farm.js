@@ -24,6 +24,7 @@ FarmSchema.statics.findByName = async function (id) {
 
 FarmSchema.pre('save', function(next) {
 	console.log('added farm '+this.farm_id)
+	console.log(this)
 	// this.model('NDVI').find({farm: this._id}, next)
 });
 
@@ -32,7 +33,9 @@ FarmSchema.pre('remove', function(next) {
 	// this.model('NDVI').find({farm: this._id}, next)
 });
 
-let Farm = module.exports = mongoose.model('Farm', FarmSchema);
+
+
+module.exports = exports = mongoose.model('Farm', FarmSchema);
 
 // module.exports.get = function (callback, limit) {
 //     Farm.find(callback).limit(limit);

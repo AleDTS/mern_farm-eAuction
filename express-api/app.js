@@ -53,17 +53,25 @@ app.use(function(err, req, res, next) {
 // Database
 //=============================================================================
 let mongoose = require('mongoose');
-const uri = process.env.MONGODB_URL || 'mongodb://db:27017/test'
+const uri = process.env.MONGODB_URL || 'mongodb://db:27017/app'
 
-const connectDB = () => {
-	return mongoose.connect(uri,  {useNewUrlParser: true })
-};
-
-connectDB()
-	.then(() => {
-		console.log('DATBASE CONNECTED')
+mongoose.connect(uri,  {useNewUrlParser: true })
+	.then(res => {
+		console.log('DATABASE CONNECTED: '+res);
 		require('./models/seed')
 	})
+
+let db = mongoose.connection;
+
+db.on('error', console.error.bind(console, 'MongoDB connection error:'));
+// db.on('disconnected', connect)
+
+// db.on('connected', (res) => {
+// 	console.log('DATABASE CONNECTED: '+res);
+// 	require('./models/seed')
+// })
+
+// db.on('data', console.log)
 
 // Exports
 //=============================================================================

@@ -11,11 +11,33 @@ export default class Screen1 extends React.Component{
 	constructor(props) {
 		super(props);
 		this.state = {
-			  value: ''
+			  error: null,
+		      isLoaded: false,
+		      farms: []
 		};
+	}
+	componentDidMount() {
+		fetch("http://localhost:9000/api/farms")
+			.then(res => res.json())
+			.then(
+				(result) => {
+					this.setState({
+						isLoaded: true,
+						farms: result.farms
+					});
+				},
+
+				(error) => {
+					this.setState({
+						isLoaded: true,
+						error
+					});
+				}
+			)
 	}
 
 	render() {
+		const { error, isLoaded, farms } = this.state;
 		return (
 			<Container>
 				<Row>
@@ -23,7 +45,7 @@ export default class Screen1 extends React.Component{
 						<Map geojson={GEOJSON}/>
 					</Col>
 					<Col>
-						<CardSearch farms={FARMS} />
+						<CardSearch farms={farms} />
 					</Col>
 				</Row>
 			</Container>
@@ -204,8 +226,8 @@ const GEOJSON = {
     ]
 }
 
-const FARMS = [
-	{ "farm_id" : 221, "name" : "Farm X", "latitude" : 4.68566, "longitude" : -74.21133, "culture" : "soybean", "variety" : "XXX1", "total_area" : 1000, "yield_estimation" : 60, "price" : 72, "__v" : 0 },
-	{ "farm_id" : 231, "name" : "Farm Y", "latitude" : -20.41673, "longitude" : -48.75594, "culture" : "soybean", "variety" : "XXX2", "total_area" : 900, "yield_estimation" : 85, "price" : 81, "__v" : 0 },
-	{ "farm_id" : 271, "name" : "Farm Z", "latitude" : -22.946619, "longitude" : -45.580756, "culture" : "rice", "variety" : "XXX1", "total_area" : 850, "yield_estimation" : 58, "price" : 80.5, "__v" : 0 }
-]
+// const FARMS = [
+// 	{ "farm_id" : 221, "name" : "Farm X", "latitude" : 4.68566, "longitude" : -74.21133, "culture" : "soybean", "variety" : "XXX1", "total_area" : 1000, "yield_estimation" : 60, "price" : 72, "__v" : 0 },
+// 	{ "farm_id" : 231, "name" : "Farm Y", "latitude" : -20.41673, "longitude" : -48.75594, "culture" : "soybean", "variety" : "XXX2", "total_area" : 900, "yield_estimation" : 85, "price" : 81, "__v" : 0 },
+// 	{ "farm_id" : 271, "name" : "Farm Z", "latitude" : -22.946619, "longitude" : -45.580756, "culture" : "rice", "variety" : "XXX1", "total_area" : 850, "yield_estimation" : 58, "price" : 80.5, "__v" : 0 }
+// ]

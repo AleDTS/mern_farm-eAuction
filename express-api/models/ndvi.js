@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 const ObjectId = Schema.Types.ObjectId;
 
-const NDVISchema = new Schema({
+const NdviSchema = new Schema({
 	date:	Date,
 	value:	Number,
 	farm: {
@@ -12,6 +12,4 @@ const NDVISchema = new Schema({
 	 }
 });
 
-const NDVI = mongoose.model('NDVI', NDVISchema);
-
-module.exports = {NDVI};
+let Ndvi = module.exports = mongoose.model('Ndvi', NdviSchema);
