@@ -4,6 +4,7 @@
 // https://hackernoon.com/how-to-develop-a-boilerplate-for-api-with-node-js-express-and-mongodb-4c771ae1c2df
 // https://getstream.io/blog/building-a-node-js-powered-api-with-express-mongoose-mongodb/
 // https://medium.com/@dinyangetoh/how-to-build-simple-restful-api-with-nodejs-expressjs-and-mongodb-99348012925d
+// https://www.freecodecamp.org/news/introduction-to-mongoose-for-mongodb-d2a7aa593c57/
 
 // const mongoose = require('mongoose');
 //

@@ -3,7 +3,6 @@ const Schema = mongoose.Schema;
 
 const FarmSchema = new Schema({
 	farm_id:			Number,
-	// farm_id:			ObjectId,
 	name:				String,
 	latitude:			Number,
 	longitude:			Number,
@@ -11,16 +10,14 @@ const FarmSchema = new Schema({
 	variety:			String,
 	total_area:			Number,
 	yield_estimation:	Number,
-	price:				Number
+	price:				Number,
+	// geojson:			String
+	geojson:			Object
+	// geojson:			{
+	// 	type: 	Schema.ObjectId,
+	// 	ref:	'GeoJSchema'
+	// }
 });
-
-FarmSchema.statics.findByName = async function (id) {
-	let farm = await this.findOne({
-		farm_id: id
-	})
-
-	return farm;
-}
 
 FarmSchema.pre('save', function(next) {
 	console.log('added farm '+this.farm_id)

@@ -16,5 +16,11 @@ router.get('/', function(req, res, next) {
 router.route('/farms')
 	.get(farmController.list)
 
+router.route('/farms/:farm_id')
+	.get(farmController.view)
+
+router.route('/farms/:farm_id/getGeo')
+	.get(farmController.getGeo)
+
 
 module.exports = router;

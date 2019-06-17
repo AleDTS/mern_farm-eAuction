@@ -3,8 +3,11 @@ import { Map as LeafletMap, TileLayer, Marker, Popup, GeoJSON, LayerGroup, Circl
 
 class Map extends React.Component {
   render() {
-	  const geojson = this.props.geojson;
+	  // const geojson = this.props.map.geojson;
+	  // const center = this.props.map.latLng;
+	  const geojson = [];
 	  const center = [4.68566, -74.21133]
+	  // console.log(this.props.map)
     return (
       <LeafletMap
         center={center}

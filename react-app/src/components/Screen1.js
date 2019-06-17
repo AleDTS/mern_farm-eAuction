@@ -16,7 +16,7 @@ export default class Screen1 extends React.Component{
 		      farms: []
 		};
 	}
-	componentDidMount() {
+	componentWillMount() {
 		fetch("http://localhost:9000/api/farms")
 			.then(res => res.json())
 			.then(
@@ -37,19 +37,18 @@ export default class Screen1 extends React.Component{
 	}
 
 	render() {
-		const { error, isLoaded, farms } = this.state;
+		const { error, isLoaded, farms, map } = this.state;
 		return (
 			<Container>
 				<Row>
 					<Col>
-						<Map geojson={GEOJSON}/>
+						<Map map={map}/>
 					</Col>
 					<Col>
 						<CardSearch farms={farms} />
 					</Col>
 				</Row>
 			</Container>
-
 		);
 	}
 }

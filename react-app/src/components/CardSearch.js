@@ -10,13 +10,13 @@ export default class Screen1 extends React.Component{
 	constructor(props) {
 		super(props);
 		this.state = {
-
+			title: 'alo'
 		};
 	}
 
 	render() {
 		const farms = this.props.farms;
-		const title = farms['name'];
+		const title = this.state.title;
 
 		return (
 			<div>
@@ -37,7 +37,7 @@ class FarmAtt extends React.Component {
 		const attShown = this.props.attShown
 
 		attShown.forEach( (attribute) => {
-			console.log(attribute.key)
+			// console.log(attribute.key)
 			rows.push(
 				<ListGroup.Item>
 					{attribute}: {farmAtt[attribute]}
@@ -55,19 +55,19 @@ class FarmAtt extends React.Component {
 
 class FarmCard extends React.Component{
 
-
-
 	constructor(props){
 		super(props)
+		console.log(props)
 		this.state = {
-			isExpandOn: true,
+			isExpandOn: false,
 		}
-
 	}
 
 	render(){
-		const {isExpandOn} = this.state;
+		const {isExpandOn, first} = this.state;
+
 		const attShown = ['name', 'culture', 'variety', 'yield_estimation', 'price']
+
 		return(
 			<Card>
 				<Button
@@ -75,7 +75,7 @@ class FarmCard extends React.Component{
 					aria-controls="attributes-table"
 					aria-expanded={isExpandOn}
 				>
-					click
+					{this.props.farmAtt['name']}
 				</Button>
 				<Collapse in={this.state.isExpandOn}>
 					<div id="attributes-table">
@@ -97,7 +97,7 @@ class FarmCardRow extends React.Component {
 		const farms = this.props.farms;
 
 		farms.forEach( farm => {
-			console.log(farm.name)
+			// console.log(farm.name)
 			if (
 				( farm.name.indexOf(filterText) === -1)
 			)
