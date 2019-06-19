@@ -8,7 +8,8 @@ export default class Header extends React.Component {
     constructor(props) {
         super(props);
 		this.state = {
-		      value: ''
+			  imgpath: '../logo.svg',
+			  title: ''
 		};
     }
 
@@ -33,8 +34,9 @@ export default class Header extends React.Component {
 	}
 
 	render() {
+		this.state.title = this.props.title
 		return (
-			<this.Title title='Titulo' imgpath="../logo.svg" />
+			<this.Title title={this.props.title} imgpath={this.state} />
 		);
 	}
 

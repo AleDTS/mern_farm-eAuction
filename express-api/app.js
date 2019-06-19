@@ -58,20 +58,14 @@ const uri = process.env.MONGODB_URL || 'mongodb://db:27017/app'
 mongoose.connect(uri,  {useNewUrlParser: true })
 	.then(res => {
 		console.log('DATABASE CONNECTED: '+res);
+
+		// Seed initial data at public/data to db
 		require('./models/seed')
 	})
 
 let db = mongoose.connection;
 
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
-// db.on('disconnected', connect)
-
-// db.on('connected', (res) => {
-// 	console.log('DATABASE CONNECTED: '+res);
-// 	require('./models/seed')
-// })
-
-// db.on('data', console.log)
 
 // Exports
 //=============================================================================

@@ -4,7 +4,7 @@ let Farm = require('./farm');
 exports.list = (req, res) => {
 
     Farm.find({})
-		.select('name culture variety yield_estimation price')
+		.select('farm_id name culture variety yield_estimation price')
 		.then(farms => {
 			res.json({farms: farms})
 			// console.log(farms)
@@ -16,6 +16,7 @@ exports.list = (req, res) => {
 		})
 };
 
+// Get geojson and coordinates from one farm by id
 exports.getGeo = (req, res) => {
 	Farm.find({farm_id: req.params.farm_id})
 		.select('geojson latitude longitude')
@@ -35,6 +36,7 @@ exports.getGeo = (req, res) => {
 		})
 }
 
+// Get data from one farm by id
 exports.view = (req, res) => {
 	console.log(req.body)
 	Farm.find({farm_id: req.params.farm_id})
@@ -46,18 +48,3 @@ exports.view = (req, res) => {
 				res.status(422).send(err.errors)
 			})
 }
-
-// exports.post = function (req, res) {
-//     const farm = new Farm();
-//     farm.farm_id = req.body.farm_id;
-//
-// 	farm.save(function (err) {
-// 		if (err)
-// 			res.json(err);
-//
-// 		res.json({
-// 			message: 'New contact created!',
-// 			data: farm
-// 		});
-// 	});
-// };

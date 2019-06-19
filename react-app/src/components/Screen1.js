@@ -42,7 +42,7 @@ export default class Screen1 extends React.Component{
 			<Container>
 				<Row>
 					<Col>
-						<Map map={map}/>
+						<Map map={GEOJSON}/>
 					</Col>
 					<Col>
 						<CardSearch farms={farms} />

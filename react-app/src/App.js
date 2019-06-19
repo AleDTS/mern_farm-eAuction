@@ -1,46 +1,44 @@
 import React from 'react';
 import './App.css';
+import throttle from 'lodash.throttle';
 import Header from './components/Header'
 import Screen1 from './components/Screen1'
+import Screen2 from './components/Screen2'
+import { BrowserRouter, Switch, Route } from 'react-router-dom'
 
 
 export default class App extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            apiResponse: "",
-            dbResponse: ""
+			title: ''
         };
+		this.changeTitle = this.changeTitle.bind(this)
+		this.changeTitleThrottled = throttle(this.changeTitle, 100);
     }
 
-    // Go to API and check testAPI route for a response
-    callAPI() {
-        fetch("http://localhost:9000/testAPI")
-            .then(res => res.text())
-            .then(res => this.setState({ apiResponse: res }))
-            .catch(err => err);
-    }
+	changeTitle(str){
+		this.setState({ title: str });
+	}
 
-    // Go to API and check testDB route for a response
-    callDB() {
-        fetch("http://localhost:9000/testDB")
-            .then(res => res.text())
-            .then(res => this.setState({ dbResponse: res }))
-            .catch(err => err);
-    }
-
-
-    // Execute the calls when componnent mounts
-	componentDidMount() {
-
-  	}
-
+	componentWillUnmount() {
+		this.changeTitleThrottled.cancel();
+	}
 
     render() {
 		return (
 			<div>
-				<Header />
-				<Screen1 />
+				<Header title={this.state.title} />
+				<BrowserRouter>
+			        <Switch>
+			            <Route path="/" exact={true} component={Screen1} />
+			            <Route
+							path="/farm/:farm_id"
+							component={Screen2}
+							changeTitle={this.changeTitleThrottled}
+						/>
+			        </Switch>
+			    </ BrowserRouter>
 			</div>
 		)
     }

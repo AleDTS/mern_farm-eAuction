@@ -11,12 +11,7 @@ const FarmSchema = new Schema({
 	total_area:			Number,
 	yield_estimation:	Number,
 	price:				Number,
-	// geojson:			String
 	geojson:			Object
-	// geojson:			{
-	// 	type: 	Schema.ObjectId,
-	// 	ref:	'GeoJSchema'
-	// }
 });
 
 FarmSchema.pre('save', function(next) {
@@ -30,10 +25,4 @@ FarmSchema.pre('remove', function(next) {
 	// this.model('NDVI').find({farm: this._id}, next)
 });
 
-
-
 module.exports = exports = mongoose.model('Farm', FarmSchema);
-
-// module.exports.get = function (callback, limit) {
-//     Farm.find(callback).limit(limit);
-// }

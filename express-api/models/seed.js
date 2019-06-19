@@ -14,42 +14,13 @@ const pubDir = __dirname+'/../public/data/'
 const csvFarm = pubDir+'farms.csv';
 const csvNDVI = pubDir+'farms_ndvi.csv';
 
-// farm stream
-// const farmStream = fs.createReadStream(csvFarm);
-
 (async() => {
 	await seedFarm();
 	await seedGeoJ();
 })()
 
-async function seedGeoJ(){
-	try{
-		await new Promise((resolve,reject) => {
-			let files = fs.readdirSync(pubDir).filter(fn => fn.endsWith('.GeoJSON'));
-
-			files.forEach((file) => {
-				let id = file.match(/\d+(?=\.)/)[0];
-				let stream = fs.createReadStream(pubDir+file)
-					.on('error', reject)
-					.on('data', (data) => {
-						stream.pause();
-						let gj = JSON.parse(data);
-						Farm.findOneAndUpdate(
-							{farm_id: id},
-							{geojson: gj},
-							{useFindAndModify: false}
-						)
-							.then(doc => {})
-							.catch(err => {	return err })
-						stream.resume();
-					});
-			})
-		});
-	}catch (e){
-		console.log('error: ' + e)
-	}
-}
-
+// Seed farms to db from public/data/farms.csv
+// https://stackoverflow.com/questions/50343116/import-csv-using-mongoose-schema
 async function seedFarm() {
 	try{
 		await Promise.all([
@@ -88,6 +59,35 @@ async function seedFarm() {
 	} catch (e) {
 		console.error('error: '+e)
 	} finally {
+	}
+}
+
+// Seed geojson object to each correspondent farm
+async function seedGeoJ(){
+	try{
+		await new Promise((resolve,reject) => {
+			let files = fs.readdirSync(pubDir).filter(fn => fn.endsWith('.GeoJSON'));
+
+			files.forEach((file) => {
+				let id = file.match(/\d+(?=\.)/)[0];
+				let stream = fs.createReadStream(pubDir+file)
+					.on('error', reject)
+					.on('data', (data) => {
+						stream.pause();
+						let gj = JSON.parse(data);
+						Farm.findOneAndUpdate(
+							{farm_id: id},
+							{geojson: gj},
+							{useFindAndModify: false}
+						)
+							.then(doc => {})
+							.catch(err => {	return err })
+						stream.resume();
+					});
+			})
+		});
+	}catch (e){
+		console.log('error: ' + e)
 	}
 }
 
@@ -134,36 +134,4 @@ async function seedFarm() {
 // 		// let farm = Farm.findOne({farm_id: id[i]})
 // 		// console.log(farm.log_ndvi.push({date: line[i]}))
 // 	}
-// }
-
-// async function seed(){
-// 	try{
-// 		await Promise.all([
-// 			Farm.deleteMany({})
-// 				.then(res =>console.log('DELETE FARMS' + res)),
-// 			Ndvi.deleteMany({})
-// 				.then(res =>console.log('DELETE NDVI' + res)),
-// 		]);
-// 		await new Promise((resolve,reject) => {
-// 			seedFarm()
-// 		})
-// 	} catch (e) {
-// 		console.error('error: '+e)
-// 	} finally {
-// 	}
-// };
-
-// async function seedFarm() {
-// 	csv.fromStream(farmStream, {headers:true})
-// 	    .on('data', (data) => {
-// 			// data.log_ndvi = []
-//   			// data.log_precipitation = []
-// 	      	let farm = new Farm(data)
-// 			const newFarm = await farm.save((err)=>console.log(err))
-// 		  	console.log(newFarm === farm)
-// 	    })
-// 	    .on('end', (res) => {
-// 			console.log('SEED FARM: ' + res);
-// 			// seedLog(csvNDVI)
-// 		});
 // }

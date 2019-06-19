@@ -1,4 +1,6 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
+
 import {
 	Button,
 	Collapse,
@@ -35,14 +37,29 @@ class FarmAtt extends React.Component {
 		const rows = []
 		const farmAtt = this.props.farmAtt
 		const attShown = this.props.attShown
-
+		const link = "/farm/"+farmAtt['farm_id']
+		console.log(link)
 		attShown.forEach( (attribute) => {
 			// console.log(attribute.key)
-			rows.push(
-				<ListGroup.Item>
-					{attribute}: {farmAtt[attribute]}
-				</ListGroup.Item>
-			)
+
+			if (attribute === 'name'){
+				rows.push(
+					<ListGroup.Item>
+						{attribute}:
+						<Link to={link}>{farmAtt[attribute]}</Link>
+					</ListGroup.Item>
+				)
+			}else {
+				rows.push(
+					<ListGroup.Item>
+						{attribute}: {farmAtt[attribute]}
+					</ListGroup.Item>
+				)
+			}
+
+
+
+
 		});
 
 		return(
@@ -98,9 +115,7 @@ class FarmCardRow extends React.Component {
 
 		farms.forEach( farm => {
 			// console.log(farm.name)
-			if (
-				( farm.name.indexOf(filterText) === -1)
-			)
+			if( farm.name.indexOf(filterText) === -1)
 				return;
 
 			cards.push(

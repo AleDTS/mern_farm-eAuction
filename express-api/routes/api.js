@@ -8,9 +8,8 @@ router.use(function(req, res, next){
 	next();
 })
 
-router.get('/', function(req, res, next) {
-  res.json({ message: 'uhuul' });
-});
+//API ROUTES
+//=============================================================================
 
 //Route to list all farms
 router.route('/farms')
@@ -22,5 +21,6 @@ router.route('/farms/:farm_id')
 router.route('/farms/:farm_id/getGeo')
 	.get(farmController.getGeo)
 
+//=============================================================================
 
 module.exports = router;
