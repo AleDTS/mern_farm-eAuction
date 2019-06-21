@@ -18,7 +18,9 @@ export default class App extends React.Component {
     }
 
 	changeTitle(str){
-		this.setState({ title: str });
+		this.setState({
+			title: str
+		});
 	}
 
 	componentWillUnmount() {
@@ -33,9 +35,12 @@ export default class App extends React.Component {
 			        <Switch>
 			            <Route path="/" exact={true} component={Screen1} />
 			            <Route
-							path="/farm/:farm_id"
-							component={Screen2}
-							changeTitle={this.changeTitleThrottled}
+							path="/farms/:farm_id"
+							render={(props) =>
+								<Screen2
+									changeTitle={this.changeTitleThrottled}
+									pr={props}
+								/>}
 						/>
 			        </Switch>
 			    </ BrowserRouter>

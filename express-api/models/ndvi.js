@@ -4,12 +4,10 @@ const Schema = mongoose.Schema;
 const ObjectId = Schema.Types.ObjectId;
 
 const NdviSchema = new Schema({
-	date:	Date,
-	value:	Number,
-	farm: {
-		 type: ObjectId,
-		 ref: 'Farm'
-	 }
+	log_ndvi: [{
+		date: 	Date,
+		value: 	Number
+	}]
 });
 
-let Ndvi = module.exports = mongoose.model('Ndvi', NdviSchema);
+let Ndvi = module.exports = mongoose.model('LogNDVI', NdviSchema);

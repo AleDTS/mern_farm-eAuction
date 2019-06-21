@@ -1,6 +1,8 @@
 import React from 'react'
 import Map from './Map'
+import LineGraph from './LineGraph'
 import {
+	Button,
 	Container,
 	Row,
 	Col
@@ -16,9 +18,10 @@ export default class Screen2 extends React.Component{
 		};
 		this.changeTitle = this.changeTitle.bind(this)
 	}
-	componentWillMount() {
-		const id = this.props.match.params.farm_id
-		fetch("http://localhost:9000/api/farms/"+id)
+	componentDidMount() {
+		// const id = this.props.match.params.farm_id
+		const { farm_id } = this.props.pr.match.params
+		fetch("http://localhost:9000/api/farms/"+farm_id)
 			.then(res => res.json())
 			.then(
 				(result) => {
@@ -37,14 +40,19 @@ export default class Screen2 extends React.Component{
 			)
 	}
 
-	changeTitle(str){
+	changeTitle = (str) => {
 		this.props.changeTitle(str);
 	}
 
 	render() {
-		const { farm } = this.state;
-		let title = farm.name || ''
-		// this.changeTitle(title)
+		const { isLoaded, farm } = this.state;
+		let title = farm.name || '';
+		this.changeTitle(title)
+		let data = farm.log_ndvi;
+		// console.log(data)
+		if (!isLoaded) {
+		      return <p>Loading ...</p>;
+		}
 		return (
 			<Container>
 				<Row>
@@ -52,9 +60,7 @@ export default class Screen2 extends React.Component{
 						<Map map={[]}/>
 					</Col>
 					<Col>
-						<h1>
-						{title}
-						</h1>
+						<LineGraph data={data}/>
 					</Col>
 				</Row>
 			</Container>

@@ -1,4 +1,5 @@
 let Farm = require('./farm');
+let LogNDVI = require('./farm');
 
 // List all farms
 exports.list = (req, res) => {
@@ -38,8 +39,9 @@ exports.getGeo = (req, res) => {
 
 // Get data from one farm by id
 exports.view = (req, res) => {
-	console.log(req.body)
+	// console.log(req.body)
 	Farm.find({farm_id: req.params.farm_id})
+		.populate('log_ndvi')
 		.then(data => {
 			res.json({farm: data})})
 		.catch(err => {
@@ -47,4 +49,17 @@ exports.view = (req, res) => {
 				logger.error(err)
 				res.status(422).send(err.errors)
 			})
+}
+
+exports.getNdvi = (req, res) => {
+	Farm.find({
+		farm_id: req.params.farm_id
+	}).populate('log_ndvi')
+	.then(data => {
+		res.json({log_ndvi: data[0].log_ndvi.log_ndvi})
+	}).catch(err => {
+		console.log('erro')
+		logger.error(err)
+		res.status(422).send(err.errors)
+	})
 }

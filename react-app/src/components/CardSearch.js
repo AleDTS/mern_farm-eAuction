@@ -37,7 +37,7 @@ class FarmAtt extends React.Component {
 		const rows = []
 		const farmAtt = this.props.farmAtt
 		const attShown = this.props.attShown
-		const link = "/farm/"+farmAtt['farm_id']
+		const link = "/farms/"+farmAtt['farm_id']
 		console.log(link)
 		attShown.forEach( (attribute) => {
 			// console.log(attribute.key)

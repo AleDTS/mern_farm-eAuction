@@ -7,58 +7,37 @@ const readline = require('readline');
 
 // import models;
 let Farm = require('./farm');
-let Ndvi = require('./ndvi');
+let LogNDVI = require('./ndvi');
 
 // import csv public file
 const pubDir = __dirname+'/../public/data/'
 const csvFarm = pubDir+'farms.csv';
 const csvNDVI = pubDir+'farms_ndvi.csv';
 
-(async() => {
-	await seedFarm();
-	await seedGeoJ();
-})()
-
-// Seed farms to db from public/data/farms.csv
-// https://stackoverflow.com/questions/50343116/import-csv-using-mongoose-schema
-async function seedFarm() {
+(async() =>{
 	try{
 		await Promise.all([
 			Farm.deleteMany({}),
-			Ndvi.deleteMany({}),
+			LogNDVI.deleteMany({}),
 		]);
-
-		await new Promise((resolve,reject) => {
-			let buffer = []
-			let stream = fs.createReadStream(csvFarm)
-				.pipe(csv({headers: true}))
-				.on('error', reject)
-			    .on('data', async (data) => {
-					stream.pause();
-					buffer.push(data);
-					stream.resume();
-			      	// let farm = new Farm(data)
-					// const newFarm = await farm.save((err)=>console.log(err))
-				  	// console.log(newFarm === farm)
-			    })
-			    .on('end', async (res) => {
-					try {
-						let newFarm = await Farm.insertMany(buffer, (err,docs) => {
-							if (err) console.log('ERROR: '+err)
-							// console.log(docs)
-						})
-						buffer = []
-						resolve();
-					} catch(e) {
-						stream.destroy(e);
-					} finally {
-						console.log('SEED FARM: ' + res);
-					}
-				});
-		})
+		await seedFarm(await csv2obj(csvFarm));
+		await seedLog(await csv2obj(csvNDVI));
+		await seedGeoJ();
 	} catch (e) {
-		console.error('error: '+e)
+		console.log(e)
+	}
+})()
+
+// Seed farms to db from public/data/farms.csv
+async function seedFarm(buffer) {
+	try{
+		Farm.insertMany(buffer, (err,docs) => {
+			if (err) console.log('ERROR: '+err)
+		})
+	}catch (e){
+		console.log('error: ' + e)
 	} finally {
+		console.log('SEED FARMS');
 	}
 }
 
@@ -75,63 +54,76 @@ async function seedGeoJ(){
 					.on('data', (data) => {
 						stream.pause();
 						let gj = JSON.parse(data);
-						Farm.findOneAndUpdate(
+ 						Farm.findOneAndUpdate(
 							{farm_id: id},
 							{geojson: gj},
 							{useFindAndModify: false}
-						)
-							.then(doc => {})
+						).then(doc => {})
 							.catch(err => {	return err })
 						stream.resume();
-					});
+					}).on('end', async (res) => {
+						resolve();
+	 				});
 			})
 		});
 	}catch (e){
 		console.log('error: ' + e)
+	} finally {
+		console.log('SEED GEOJ');
 	}
 }
 
-// function seedLog(csvpath) {
-// 	const rl = readline.createInterface({
-// 	  input: fs.createReadStream(csvpath),
-// 	  crlfDelay: Infinity
-// 	});
-// 	let ids = []
-// 	var first = true
-// 	rl.on('line', (line) => {
-// 		line = line.split(/(?!\B"[^"]*),(?![^"]*"\B)/);
-// 		if(first){
-// 			first = false;
-// 			ids = getIDs(line)
-// 			console.log(ids)
-// 			return;
-// 		}
-// 		let date = line.shift()
-// 		// newLOG(date,line,ids, 'log_ndvi')
-// 	});
-// }
-//
-// function getIDs(row){
-// 	let id = 0
-// 	let ids = []
-// 	let names = row
-//
-// 	names.shift()
-// 	names.forEach((name) =>{
-// 		id = Number(name.split('_')[1])
-// 		ids.push(id)
-// 	})
-// 	return ids
-// }
-//
-// function newLOG(date, line, ids, logkey){
-// 	// console.log(date, line, ids)
-// 	for (var i=0; i<ids.leng; i++){
-// 		Farm.updateOne(
-// 			{name_id: id[i]},
-// 			{logkey}
-// 		)
-// 		// let farm = Farm.findOne({farm_id: id[i]})
-// 		// console.log(farm.log_ndvi.push({date: line[i]}))
-// 	}
-// }
+async function seedLog(buffer){
+	try{
+		const keys = Object.keys(buffer[0]);
+		keys.shift()
+
+		keys.forEach((farm) => {
+			const id = farm.match(/\d+/)[0];
+			let newLog = new LogNDVI();
+			buffer.forEach((log) => {
+				newLog.log_ndvi.push({
+					date: log['date'],
+					value: log[farm].replace(',','.')
+				})
+			})
+			newLog.save();
+
+			Farm.updateOne(
+				{farm_id: id},
+				{log_ndvi: newLog._id}
+				// {safe: true, upsert: true}
+			).then((res) => {})
+		})
+	}catch (e){
+		console.log('error: ' + e)
+	} finally {
+		console.log('SEED LOG');
+	}
+}
+
+// https://stackoverflow.com/questions/50343116/import-csv-using-mongoose-schema
+async function csv2obj(csvpath){
+	let buffer = []
+	try{
+		await new Promise((resolve,reject) => {
+			let stream = fs.createReadStream(csvpath)
+				.pipe(csv({headers: true}))
+				.on('error', reject)
+			    .on('data', async (data) => {
+					stream.pause();
+					buffer.push(data);
+					stream.resume();
+			    })
+			    .on('end', async (res) => {
+					resolve();
+				});
+		});
+	}catch (e){
+		console.log('error: ' + e)
+		return null;
+	} finally {
+		return buffer;
+	}
+	return null;
+}

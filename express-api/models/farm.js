@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+const LogNDVI = require('./ndvi')
 
 const FarmSchema = new Schema({
 	farm_id:			Number,
@@ -11,7 +12,16 @@ const FarmSchema = new Schema({
 	total_area:			Number,
 	yield_estimation:	Number,
 	price:				Number,
-	geojson:			Object
+	geojson:			Object,
+	// https://stackoverflow.com/questions/7810892/node-js-creating-relationships-with-mongoose
+	log_ndvi: {
+		type: 	Schema.Types.ObjectId,
+		ref:	'LogNDVI'
+	}
+	// log_ndvi: [	{
+	// 	date: 	Date,
+	// 	value: 	Number
+	// }]
 });
 
 FarmSchema.pre('save', function(next) {
