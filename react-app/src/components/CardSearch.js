@@ -40,8 +40,6 @@ class FarmAtt extends React.Component {
 		const link = "/farms/"+farmAtt['farm_id']
 		console.log(link)
 		attShown.forEach( (attribute) => {
-			// console.log(attribute.key)
-
 			if (attribute === 'name'){
 				rows.push(
 					<ListGroup.Item>
@@ -56,10 +54,6 @@ class FarmAtt extends React.Component {
 					</ListGroup.Item>
 				)
 			}
-
-
-
-
 		});
 
 		return(

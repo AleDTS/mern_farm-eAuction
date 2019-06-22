@@ -1,12 +1,12 @@
-import React from 'react';
-import Map from './Map';
-import LineGraph from './LineGraph';
-import FarmInfo from './FarmInfo';
+import React from 'react'
 import {
+	Button,
 	Container,
 	Row,
-	Col
-} from 'react-bootstrap';
+	Col,
+	ListGroup,
+	Card
+} from 'react-bootstrap'
 
 export default class Screen2 extends React.Component{
 	constructor(props) {
@@ -14,7 +14,6 @@ export default class Screen2 extends React.Component{
 		this.state = {
 			  error: null,
 		      isLoaded: false,
-			  showModal: false,
 		      farm: {}
 		};
 		this.changeTitle = this.changeTitle.bind(this)
