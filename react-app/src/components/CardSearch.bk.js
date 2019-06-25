@@ -5,10 +5,12 @@ import {
 	Button,
 	Collapse,
 	Card,
-	ListGroup
+	ListGroup,
+	ToggleButtonGroup,
+	ToggleButton
 } from 'react-bootstrap';
 
-import {RadioGroup, Radio} from 'react-radio-group';
+// import {RadioGroup, Radio} from 'react-radio-group';
 
 export default class CardSearch extends React.Component{
 	constructor(props) {
@@ -109,14 +111,15 @@ class FarmCard extends React.Component{
 
 		return(
 			<Card>
-				<Button
-					type='radio'
+				<ToggleButton
+					type="radio"
+					value={this.props.farm['farm_id']}
 					onClick={() => this.setState({isExpandOn: !isExpandOn})}
 					aria-controls="attributes-table"
 					aria-expanded={isExpandOn}
 				>
 					{this.props.farm['name']}
-				</Button>
+				</ToggleButton>
 				<Collapse in={this.state.isExpandOn}>
 					<div id="attributes-table">
 						<FarmAtt
@@ -159,22 +162,19 @@ class FarmCardRow extends React.Component {
 				return;
 
 			cards.push(
-				<label>
-					<Radio
-						value={farm['farm_id']}
-					/> <FarmCard farm={farm}/>
-				</label>
+				<FarmCard farm={farm}/>
 			)
 		})
 
 		return(
-			<RadioGroup
+			<ToggleButtonGroup
+				toggle
 		        name="farm"
 		        selectedValue={farm}
 				onChange={(value)=>this.changeRadio(value)}
 			>
 				{cards}
-			</RadioGroup>
+			</ToggleButtonGroup>
 		)
 	}
 }

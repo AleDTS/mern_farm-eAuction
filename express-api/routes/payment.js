@@ -15,5 +15,7 @@ exports.charge = (req, res) => {
 	};
 	stripe.charges
 		.create(body)
-		.then(result => res.status(200).json(result));
+		.then(result => {
+			res.status(200).json(result)
+		});
 }

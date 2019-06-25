@@ -1,11 +1,12 @@
 import React from 'react'
 import { Map as LeafletMap, TileLayer, Marker, Popup, GeoJSON, LayerGroup, Circle } from 'react-leaflet';
 
-class Map extends React.Component {
+export default class Map extends React.Component {
   render() {
 	  // const geojson = this.props.map.geojson;
 	  const geojson = this.props.map.geoj;
 	  const center = this.props.map.coord;
+	  console.log(center)
     return (
       <LeafletMap
         center={center}
@@ -24,15 +25,9 @@ class Map extends React.Component {
 		</LayerGroup>
         <TileLayer
           url='http://{s}.tile.osm.org/{z}/{x}/{y}.png'
+		  attribution="&copy; <a href=&quot;http://osm.org/copyright&quot;>OpenStreetMap</a> contributors"
         />
-        <Marker position={[50, 10]}>
-          <Popup>
-            Popup for any custom information.
-          </Popup>
-        </Marker>
       </LeafletMap>
     );
   }
 }
-
-export default Map

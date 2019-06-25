@@ -2,7 +2,6 @@
 //https://blog.bam.tech/developper-news/setup-stripe-react-native-nodejs
 import React from "react";
 import StripeCheckout from "react-stripe-checkout";
-import { doPayment } from '../api.js';
 
 export default class StripeBtn extends React.Component {
 
@@ -17,7 +16,7 @@ export default class StripeBtn extends React.Component {
 	onToken = (token) => {
 		this.setState({
 			body: {
-				amount: 999,
+				amount: this.props.amount,
 				token: token
 			}
 		})
@@ -43,11 +42,9 @@ export default class StripeBtn extends React.Component {
 		const {publishableKey} = this.state;
 		return (
 			<StripeCheckout
-				label="Go Premium" //Component button text
-				name="Business LLC" //Modal Header
-				description="Upgrade to a premium account today."
-				panelLabel="Go Premium" //Submit button in modal
-				amount={999} //Amount in cents $9.99
+				label="Credit card" //Component button text
+				panelLabel="Pay" //Submit button in modal
+				amount={this.props.amount} //Amount in cents $9.99
 				token={this.onToken}
 				stripeKey={publishableKey}
 				billingAddress={false}

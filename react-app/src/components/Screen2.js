@@ -70,9 +70,7 @@ export default class Screen2 extends React.Component{
 					</Col>
 					<Col>
 						<LineGraph data={data}/>
-						<FarmInfo
-							farm={farm}
-						/>
+						<FarmInfo farm={farm}/>
 					</Col>
 				</Row>
 			</Container>

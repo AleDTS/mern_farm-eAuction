@@ -23,8 +23,8 @@ exports.getGeo = (req, res) => {
 		.select('geojson latitude longitude')
 		.then(data => {
 			res.json([{
-				geojson: data[0].geojson,
-				latLng: {
+				geoj: data[0].geojson,
+				coord: {
 					lat: data[0].latitude,
 					lng: data[0].longitude
 				}
