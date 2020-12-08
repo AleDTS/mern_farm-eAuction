@@ -11,7 +11,7 @@
     "csvtojson": "^2.0.8",
     "debug": "~2.6.9",
     "express": "~4.16.1",
-    "fast-csv": "^2.5.0",
+    "fast-csv": "^4.3.6",
     "geojson": "^0.5.0",
     "http-errors": "~1.6.3",
     "install": "^0.12.2",
